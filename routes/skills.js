@@ -16,13 +16,18 @@ import { removeDuplicates } from '../utils/common';
 router.post('/endorse', function(req, res) {
 	const updateSkills = (db, user, callback) => {
 		let skills = user.skills ? user.skills : {};
-
-		if (typeof skills[req.body.skillId] === 'undefined') {
-			skills[req.body.skillId] = [
-				"5a33ba339510f10f14835843"
-			];
+		if (req.body.endorse) {
+			if (typeof skills[req.body.skillId] === 'undefined') {
+				skills[req.body.skillId] = [
+					req.body.ownerId
+				];
+			} else {
+				skills[req.body.skillId].push(req.body.ownerId); // add the loggedIn user
+			}
 		} else {
-			skills[req.body.skillId].push("5a33ba2c9510f10f14835842"); // add the loggedIn user
+			const skill = skills[req.body.skillId];
+			skill.splice(skill.indexOf(req.body.ownerId), 1);
+			skills[req.body.skillId] = skill;
 		}
 		const collection = db.collection('users');
 		collection.updateOne({
@@ -43,6 +48,10 @@ router.post('/endorse', function(req, res) {
 			updateSkills(db, user, (result) => {
 				db.close();
 				res.send(result);
+				// if (result.ok)
+				// 	res.send({success: true});
+				// else
+				// 	res.send({success: false});
 			});
 		});
 	});
