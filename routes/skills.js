@@ -8,19 +8,21 @@ import { getUserById, findById } from '../utils/user';
 import { removeDuplicates } from '../utils/common';
 
 /**
- * Get the user corresponding to the userID
+ * Endorse the user for the given skill ID
+ * @param userId, the user Id of the user to be endorsed
+ * @param skillId, the skill id of the skill to be endorsed
  */
 
 router.post('/endorse', function(req, res) {
 	const updateSkills = (db, user, callback) => {
-		let skills = user.skills;
+		let skills = user.skills ? user.skills : {};
 
 		if (typeof skills[req.body.skillId] === 'undefined') {
 			skills[req.body.skillId] = [
-				"5a2b87e33af953386caf1c7c"
+				"5a33ba339510f10f14835843"
 			];
 		} else {
-			skills[req.body.skillId].push("5a2b87e33af953386caf1c7d"); // add the loggedIn user
+			skills[req.body.skillId].push("5a33ba2c9510f10f14835842"); // add the loggedIn user
 		}
 		const collection = db.collection('users');
 		collection.updateOne({
@@ -46,7 +48,10 @@ router.post('/endorse', function(req, res) {
 	});
 });
 
-
+/**
+ * Get the skill of the corresponding user
+ * @param userId
+ */
 
 router.get('/:userId', function(req, res) {
 
@@ -103,6 +108,7 @@ router.get('/:userId', function(req, res) {
 
 			getUsers(db, userList, (users) => {
 				getSkills(db, user.skills, users, (result) => {
+					db.close();
 					res.send(result);
 					// getUsers(db, users, )
 				});

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
 import index from './routes/index';
+import profile from './routes/profile';
 import users from './routes/users';
 import skills from './routes/skills';
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/profile', profile);
 app.use('/users', users);
 app.use('/skills', skills);
 

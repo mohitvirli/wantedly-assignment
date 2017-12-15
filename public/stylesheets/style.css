@@ -1,8 +1,30 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    height: 100vh;
+    position: relative;
 }
 
-a {
-  color: #00B7FF;
+.b-r{
+    border-right: 1px solid rgba(0,0,0,.1);
+}
+.user-collection .user{
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    color: #333;
+    text-decoration: none;
+}
+.user-collection .user:hover{
+    color: #0056b3;
+}
+.user-collection .user .user-image{
+    width: 3.2em;
+    height: 3.2em;
+    margin-right: 1em;
+    background-color: #1f88be;
+    border-radius: 50%;
+}
+.user-collection .user .user-name {
+    font-weight: 600;
 }
