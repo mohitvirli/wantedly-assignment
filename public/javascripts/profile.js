@@ -5,6 +5,14 @@ $(document).ready(function () {
 	if (window.location.search)
 		userId = window.location.search.substr(1);
 
+	const getProfile = () => {
+		$.get(`/users/${userId}`, (data) => {
+			$('.profile-name').text(data.name);
+		})
+	};
+
+	getProfile();
+
 	const getInitials = (name) => {
 		return name.split(' ').map(d => d.charAt(0)).join('').toUpperCase();
 	};
@@ -93,5 +101,21 @@ $(document).ready(function () {
 		});
 	};
 
+	const getFriends = () => {
+		$.get('/users/', data => {
+			let html = '';
+			data.filter(d => {
+				return d._id !== userId;
+			}).forEach(d => {
+				html += `<a href="/profile?${d._id}" class="user" data="${d._id}">
+						<div class="user-image"></div>
+						<div class="user-name">${d.name}</div>
+					</a>`;
+			});
+			$('.user-collection').html(html);
+		});
+	};
 	getSkills();
+	getFriends();
+
 });
