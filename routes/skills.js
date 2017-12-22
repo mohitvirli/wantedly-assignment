@@ -7,6 +7,29 @@ import { url } from '../utils/constants';
 import { getUserById, findById } from '../utils/user';
 import { removeDuplicates } from '../utils/common';
 
+
+/**
+* Add a user
+*/
+router.post('/add', function(req, res) {
+
+	const addUser = (db, callback) => {
+		const collection = db.collection('skills');
+		const skill = req.body;
+		collection.insertOne(skill, (err, doc) => {
+			if (err) throw err;
+			callback(doc);
+		})
+	};
+
+	MongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		addUser(db, (result) => {
+			res.send(result);
+		})
+	});
+});
+
 /**
  * Endorse the user for the given skill ID
  * @param userId, the user Id of the user to be endorsed

@@ -2,7 +2,7 @@ $(document).ready(() => {
 
 	const getUserName = () => {
 		$.get(`/users/${localStorage.getItem('userId')}`, (data) => {
-			$('.user-name').text(data.name);
+			$('.navbar-user-name').text(data.name);
 		})
 	};
 	$('.my-profile').hide();
