@@ -3,7 +3,7 @@
 }
 .profile-wrapper .cover{
     height: 320px;
-    background-color: #1f88be;
+    background-color: #00A4BB;
     position: relative;
 }
 .profile-details-wrapper{
@@ -123,7 +123,7 @@
     width: 2em;
     height: 2em;
     border-radius: 50%;
-    background-color: #1f88be;
+    background-color: #00A4BB;
     margin-left: 0.4em;
     display: flex;
     justify-content: center;
