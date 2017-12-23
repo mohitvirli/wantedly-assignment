@@ -2,7 +2,7 @@
 <html>
     <head>
         <% include ../partials/head%>
-        <link rel="stylesheet" href="stylesheets/login.css">
+        <link rel="stylesheet" href="stylesheets/home.css">
     </head>
     <body>
         <% include ../partials/navbar%>
@@ -14,10 +14,19 @@
                         <!-- Insert the users here -->
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="add-user-header">Add User</div>
+                    <form class="add-user-form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Name">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
             </div>
         </div>
 
         <% include ../partials/scripts%>
-        <script src="javascripts/login.js"></script>
+        <script src="javascripts/home.js"></script>
     </body>
 </html>
