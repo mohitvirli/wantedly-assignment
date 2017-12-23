@@ -23,7 +23,24 @@
     <h3 class="header"></h3>
     <div class="row content">
         <div class="col-8 b-r">
-            <div class="skills-header">What I'm good at</div> //TODO: add skills wrapper
+            <div class="skills-header-wrapper">
+                <div class="skills-header">
+                    What I'm good at
+                </div>
+                <div class="add-skill only-user">
+                    <button type="button" class="btn add-skill-btn btn-outline-primary btn-sm">
+                        + Add skill
+                    </button>
+                </div>
+            </div>
+            <form class="add-skill-form only-user">
+                <div class="form-group">
+                    <label for="skill">Skill Name</label>
+                    <input type="text" class="form-control" id="skill" placeholder="Enter Skill Name" aria-describedby="skillHelp">
+                    <small id="skillHelp" class="form-text text-muted"></small>
+                </div>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </form>
             <div class="skills-wrapper">
                 <div class="skills-full-width">
                 </div>

@@ -17,10 +17,6 @@ $(document).ready(function () {
 		return name.split(' ').map(d => d.charAt(0)).join('').toUpperCase();
 	};
 
-	const getUserDetails = () => {
-
-	};
-
 	const endorseSkill = (skillId, endorse) => {
 		$.ajax({
 			url : '/skills/endorse',
@@ -115,7 +111,39 @@ $(document).ready(function () {
 			$('.user-collection').html(html);
 		});
 	};
+
 	getSkills();
 	getFriends();
 
+	$('.add-skill-btn').click(e => {
+		$('.add-skill-form').slideToggle(300);
+	});
+
+	$('.add-skill-form').on('submit', e => {
+		e.preventDefault();
+		const data = {
+			skill: {
+					name: $('#skill').val(),
+				},
+			userId: userId
+		};
+
+		if (data.skill.name) {
+			$.ajax({
+				url: 'skills/add/',
+				data: JSON.stringify(data),
+				type: 'POST',
+				contentType: "application/json"
+			}).done(res => {
+				console.log(res);
+				if (res.nModified === 1) {
+					$('#skill').val('');
+					$('#skillHelp').text('Skill added!');
+					getSkills();
+				} else {
+					$('#skillHelp').text('Skill added already !');
+				}
+			})
+		}
+	})
 });

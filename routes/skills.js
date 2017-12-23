@@ -9,24 +9,59 @@ import { removeDuplicates } from '../utils/common';
 
 
 /**
-* Add a user
+* Add a skill for the current user
 */
 router.post('/add', function(req, res) {
 
-	const addUser = (db, callback) => {
+	const addSkillToDB = (db, callback) => {
 		const collection = db.collection('skills');
-		const skill = req.body;
-		collection.insertOne(skill, (err, doc) => {
+		const skill = req.body.skill;
+		collection.updateOne(skill, {
+			$set: skill,
+		}, {
+			upsert: true
+		}, (err, doc) => {
 			if (err) throw err;
 			callback(doc);
 		})
 	};
 
+	const updateUser = (db, callback, skill) => {
+
+		const setObj = {};
+		setObj[`skills.${skill._id}`] = [];
+
+		const collection = db.collection('users');
+		collection.updateOne({
+			_id: new ObjectId(req.body.userId)
+		}, {
+			$set: setObj,
+		}, (err, result) => {
+			if (err) throw err;
+			callback(result);
+		});
+	};
+
+
+	const addSkillUser = (db, callback) => {
+		const collection = db.collection('skills');
+		collection.findOne({
+				name: req.body.skill.name
+			}, (err, skill) => {
+				if (err) throw err;
+				console.log(skill);
+				updateUser(db, callback, skill);
+			});
+	};
+
 	MongoClient.connect(url, function(err, db) {
 		if (err) throw err;
-		addUser(db, (result) => {
-			res.send(result);
-		})
+
+		addSkillToDB(db, () => {
+			addSkillUser(db, (result) => {
+				res.send(result);
+			});
+		});
 	});
 });
 
@@ -89,13 +124,17 @@ router.get('/:userId', function(req, res) {
 
 	const getUsers = (db, userList, callback) => {
 		const collection = db.collection('users');
-		collection.find({
+		if (userList.length > 0) {
+			collection.find({
 				$or: userList
 			})
-			.toArray((err, users) => {
-				if (err) throw err;
-				callback(users);
-			})
+				.toArray((err, users) => {
+					if (err) throw err;
+					callback(users);
+				});
+		} else {
+			callback([]);
+		}
 	};
 
 	const getSkills = (db, skillList, users, callback) => {
@@ -106,25 +145,29 @@ router.get('/:userId', function(req, res) {
 			}
 		});
 
-		const collection = db.collection('skills');
-		collection.find({
+		if (skills.length > 0) {
+			const collection = db.collection('skills');
+			collection.find({
 				$or: skills
 			})
-			.toArray((err, skillDetails) => {
-				if (err) throw err;
-				const result = skillDetails.map(d => {
-					const userList = skillList[d._id];
-					return {
-						skill: d,
-						users : userList.map(id => {
-							const user = findById(users, id);
-							delete user.skills;
-							return user;
-						})
-					}
-				});
-				callback(result);
-			})
+				.toArray((err, skillDetails) => {
+					if (err) throw err;
+					const result = skillDetails.map(d => {
+						const userList = skillList[d._id];
+						return {
+							skill: d,
+							users : userList.map(id => {
+								const user = findById(users, id);
+								delete user.skills;
+								return user;
+							})
+						}
+					});
+					callback(result);
+				})
+		} else {
+			callback([]);
+		}
 	};
 
 	MongoClient.connect(url, function(err, db) {

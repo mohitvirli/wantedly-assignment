@@ -32,12 +32,13 @@ $(document).ready(function () {
 		const user = {
 			name: $('#username').val()
 		};
-
-		$.post('/users/add', user).done((data) => {
-			if(data.n === 1) {
-				$('#username').val('');
-				getAllUsers();
-			}
-		})
+		if (user.name) {
+			$.post('/users/add', user).done((res) => {
+				if(res.n === 1) {
+					$('#username').val('');
+					getAllUsers();
+				}
+			})
+		};
 	});
 });
